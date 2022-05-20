@@ -3,12 +3,15 @@ import json
 # Imports flask
 # The capital "F" indicates it is a class
 # import render_template from flask
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
+if os.path.exists("env.py"):
+    import env
 
 
 # Create an instance of Flask and store it in var app:
 # The first arg __name__ is the name of the package.
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY")
 
 
 # Use a @ decorator to wrap functions
@@ -40,8 +43,8 @@ def about_member(member_name):
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
-        print(request.form.get("name"))
-        print(request.form["email"])
+        flash("Thanks {}, we have received your message!".format(
+            request.form.get("name")))
     return render_template("contact.html", page_title="Contact")
   
 
